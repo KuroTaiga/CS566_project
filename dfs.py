@@ -1,3 +1,4 @@
+import time
 # Define possible movements (up, down, left, right) disableing : and diagonals)
 MOVEMENTS = [(0, 1), (0, -1), (1, 0), (-1, 0)]# (1, 1), (1, -1), (-1, 1), (-1, -1)]
 class Node():
@@ -40,17 +41,33 @@ def dfs(grid,start,goal):
 
 #example call
 if __name__ == "__main__":
-    grid = [[0, 0, 0, 0, 0],
+    grid1 = [[0, 0, 0, 0, 0],
             [0, 1, 1, 0, 0],
             [0, 0, 0, 1, 0],
-            [0, 0, 1, 1, 0],
-            [0, 0, 0, 1, 0]]
-    start = (0,0)
-    goal  = (4,4)
-    path,nodeexplored = dfs(grid,start,goal)
-    if path:
-        print("Path found:", path)
-    else:
-        print("No path found.")
-    print(nodeexplored)
+            [0, 0, 1, 1, 1],
+            [0, 0, 0, 0, 0]]
+    grid2 = [[0,0,1,0,1,0,1],
+             [0,0,0,0,0,0,0],
+             [0,1,1,0,0,1,0],
+             [1,0,0,0,0,0,0],
+             [1,0,1,0,1,0,0]]
+    grid3 = [[0, 0, 0, 0, 0],
+            [0, 1, 0, 1, 0],
+            [0, 0, 0, 1, 0],
+            [0, 1, 1, 1, 0],
+            [1, 1, 0, 1, 0]]
+    gridLs = [grid1,grid2,grid3]
+
+    start = (0, 0)
+    for grid in gridLs:
+        goal = (len(grid)-1, len(grid[0])-1)
+        starttime = time.time()
+        path,nodeexplored = dfs(grid,start,goal)
+        endtime = time.time()
+        if path:
+            print("Path found:", path)
+        else:
+            print("No path found.")
+        print(nodeexplored)
+        print("runtime: ", endtime-starttime)
 

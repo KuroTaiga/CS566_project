@@ -1,5 +1,5 @@
 import queue
-
+import time
 # Define possible movements (up, down, left, right) disableing : and diagonals)
 MOVEMENTS = [(0, 1), (0, -1), (1, 0), (-1, 0)]# (1, 1), (1, -1), (-1, 1), (-1, -1)]
 class Node():
@@ -19,9 +19,11 @@ def reconstruct_path(currNode):
 def bfs(grid,start,goal):
     nodecount = 0
     nodeQueue = queue.Queue()
+    exploredLS = []
     startNode = Node(None,start)
     goalNode = Node(None,goal)
     nodeQueue.put(startNode)
+    exploredLS.append(startNode)
     while(not nodeQueue.empty()):
         currNode = nodeQueue.get()
         if currNode == goalNode:
@@ -33,22 +35,40 @@ def bfs(grid,start,goal):
                 nodecount += 1
                 # when neighbor is a legal move put it in queue
                 neighborNode = Node(currNode,neighbor)
-                nodeQueue.put(neighborNode)
+                if neighborNode not in exploredLS:
+                    exploredLS.append(neighborNode)
+                    nodeQueue.put(neighborNode)
     return (None,nodecount) # no path found
 
 #example call
 if __name__ == "__main__":
-    grid = [[0, 0, 0, 0, 0],
+    grid1 = [[0, 0, 0, 0, 0],
             [0, 1, 1, 0, 0],
             [0, 0, 0, 1, 0],
-            [0, 0, 1, 1, 0],
+            [0, 0, 1, 1, 1],
             [0, 0, 0, 0, 0]]
-    start = (0,0)
-    goal  = (4,4)
-    path,nodeexplored = bfs(grid,start,goal)
-    if path:
-        print("Path found:", path)
-    else:
-        print("No path found.")
-    print(nodeexplored)
+    grid2 = [[0,0,1,0,1,0,1],
+             [0,0,0,0,0,0,0],
+             [0,1,1,0,0,1,0],
+             [1,0,0,0,0,0,0],
+             [1,0,1,0,1,0,0]]
+    grid3 = [[0, 0, 0, 0, 0],
+            [0, 1, 0, 1, 0],
+            [0, 0, 0, 1, 0],
+            [0, 1, 1, 1, 0],
+            [1, 1, 0, 1, 0]]
+    gridLs = [grid1,grid2,grid3]
+
+    start = (0, 0)
+    for grid in gridLs:
+        goal = (len(grid)-1, len(grid[0])-1)
+        starttime = time.time()
+        path,nodeexplored = bfs(grid,start,goal)
+        endtime = time.time()
+        if path:
+            print("Path found:", path)
+        else:
+            print("No path found.")
+        print(nodeexplored)
+        print("runtime: ", endtime-starttime)
 

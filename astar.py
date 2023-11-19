@@ -1,4 +1,5 @@
 import heapq
+import time
 
 # Define possible movements (up, down, left, right) disableing : and diagonals)
 MOVEMENTS = [(0, 1), (0, -1), (1, 0), (-1, 0)]# (1, 1), (1, -1), (-1, 1), (-1, -1)]
@@ -22,7 +23,7 @@ def heuristic(node, goal):
     return abs(node[0] - goal[0]) + abs(node[1] - goal[1])
 
 def astar(grid, start, goal):
-    nodecount = 0
+    nodecount =pushcount = 0
     # grid is the map
     # start is the starting postion
     # goal is the target postion
@@ -40,7 +41,7 @@ def astar(grid, start, goal):
         current = heapq.heappop(open_list) #consider the node with lowest f score
         if current == end_node:
             path = reconstruct_path(current)
-            return (path,nodecount)
+            return (path,nodecount,pushcount)
         #put currnode into the closed list andd look at its neighbors
         close_set.add(current)
 
@@ -48,12 +49,12 @@ def astar(grid, start, goal):
             neighbor = (current.position[0] + dx, current.position[1] + dy)
             if 0 <= neighbor[0] < len(grid) and 0 <= neighbor[1] < len(grid[0]) and grid[neighbor[0]][neighbor[1]]!=1:
                 #don't run into walls and keep within bounds
-                
+                nodecount +=1
                 neighborNode = Node(current,neighbor)
                 if neighborNode in close_set:
                     #ignore node in close set already
                     continue
-                nodecount +=1
+                
                 neighborNode.h = heuristic(neighbor,goal)
                 neighborNode.g = current.g + 1 # Assuming uniform cost for all movements
                 neighborNode.f = neighborNode.h+neighborNode.g
@@ -67,10 +68,12 @@ def astar(grid, start, goal):
                         if neighborNode.g<=openNode.g:
                             open_list[i] = neighborNode
                             heapq.heapify(open_list)
+                            pushcount+=1
                             break
                 if add_flag: #neighborNode not in open list
+                    pushcount+=1
                     heapq.heappush(open_list, neighborNode)
-    return (None,nodecount)  # No path found
+    return (None,nodecount,pushcount)  # No path found
 
 def reconstruct_path(currNode):
     path = []
@@ -81,18 +84,33 @@ def reconstruct_path(currNode):
 
 # Example usage:
 if __name__ == "__main__":
-    grid = [[0, 0, 0, 0, 0],
+    grid1 = [[0, 0, 0, 0, 0],
             [0, 1, 1, 0, 0],
             [0, 0, 0, 1, 0],
             [0, 0, 1, 1, 1],
             [0, 0, 0, 0, 0]]
+    grid2 = [[0,0,1,0,1,0,1],
+             [0,0,0,0,0,0,0],
+             [0,1,1,0,0,1,0],
+             [1,0,0,0,0,0,0],
+             [1,0,1,0,1,0,0]]
+    grid3 = [[0, 0, 0, 0, 0],
+            [0, 1, 0, 1, 0],
+            [0, 0, 0, 1, 0],
+            [0, 1, 1, 1, 0],
+            [1, 1, 0, 1, 0]]
+    gridLs = [grid1,grid2,grid3]
 
     start = (0, 0)
-    goal = (4, 4)
-    path,nodeexplored = astar(grid, start, goal)
-
-    if path:
-        print("Path found:", path)
-    else:
-        print("No path found.")
-    print(nodeexplored)
+    for grid in gridLs:
+        goal = (len(grid)-1, len(grid[0])-1)
+        starttime = time.time()
+        path,nodeexplored,heapCount = astar(grid, start, goal)
+        endtime = time.time()
+        if path:
+            print("Path found:", path)
+        else:
+            print("No path found.")
+        print("Number of node explored: ",nodeexplored)
+        print("The number of time the a node is push to a heap or heapify is called: ",heapCount)
+        print("Execution time:", endtime-starttime)
