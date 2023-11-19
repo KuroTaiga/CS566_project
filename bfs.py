@@ -16,14 +16,15 @@ def reconstruct_path(currNode):
         currNode = currNode.parent
     return path[::-1]
 
-def bfs(grid,start,goal):
+def bfs(grid,start,goal,DNRflag):
     nodecount = 0
+    visited = []
     nodeQueue = queue.Queue()
-    exploredLS = []
     startNode = Node(None,start)
     goalNode = Node(None,goal)
     nodeQueue.put(startNode)
-    exploredLS.append(startNode)
+    if DNRflag:
+        visited.append(startNode)
     while(not nodeQueue.empty()):
         currNode = nodeQueue.get()
         if currNode == goalNode:
@@ -35,8 +36,11 @@ def bfs(grid,start,goal):
                 nodecount += 1
                 # when neighbor is a legal move put it in queue
                 neighborNode = Node(currNode,neighbor)
-                if neighborNode not in exploredLS:
-                    exploredLS.append(neighborNode)
+                if DNRflag:
+                    if neighborNode not in visited:
+                        visited.append(neighborNode)
+                        nodeQueue.put(neighborNode)
+                else:
                     nodeQueue.put(neighborNode)
     return (None,nodecount) # no path found
 
@@ -47,11 +51,12 @@ if __name__ == "__main__":
             [0, 0, 0, 1, 0],
             [0, 0, 1, 1, 1],
             [0, 0, 0, 0, 0]]
-    grid2 = [[0,0,1,0,1,0,1],
+    grid2 = [[0,1,1,0,1,0,1],
              [0,0,0,0,0,0,0],
-             [0,1,1,0,0,1,0],
-             [1,0,0,0,0,0,0],
-             [1,0,1,0,1,0,0]]
+             [0,1,1,0,1,1,0],
+             [0,0,1,0,0,1,0],
+             [1,0,1,0,1,1,0],
+             [1,0,0,0,1,0,0]]
     grid3 = [[0, 0, 0, 0, 0],
             [0, 1, 0, 1, 0],
             [0, 0, 0, 1, 0],
@@ -61,14 +66,19 @@ if __name__ == "__main__":
 
     start = (0, 0)
     for grid in gridLs:
-        goal = (len(grid)-1, len(grid[0])-1)
-        starttime = time.time()
-        path,nodeexplored = bfs(grid,start,goal)
-        endtime = time.time()
-        if path:
-            print("Path found:", path)
-        else:
-            print("No path found.")
-        print(nodeexplored)
-        print("runtime: ", endtime-starttime)
+        for flag in [True, False]:
+            goal = (len(grid)-1, len(grid[0])-1)
+            starttime = time.time()
+            path,nodeexplored = bfs(grid,start,goal,flag)
+            endtime = time.time()
+            if flag:
+                print("No repeating BFS")
+            else:
+                print("Base implementation BFS, don't check for repeating node")
+            if path:
+                print("Path found:", path)
+            else:
+                print("No path found.")
+            print(nodeexplored)
+            print("runtime: ", endtime-starttime)
 

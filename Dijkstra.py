@@ -46,7 +46,6 @@ def Dijkstra(maze, start, end):
             path = Path(S, pre, start, end)
             return (path,nodecount)
         dis.pop(Q.index(point))
-        Q.pop(Q.index(point))
         for point in S:
             for i in range (0,4):
                 nodecount +=1
@@ -67,11 +66,12 @@ if __name__ == "__main__":
             [0, 0, 0, 1, 0],
             [0, 0, 1, 1, 1],
             [0, 0, 0, 0, 0]]
-    grid2 = [[0,0,1,0,1,0,1],
+    grid2 = [[0,1,1,0,1,0,1],
              [0,0,0,0,0,0,0],
-             [0,1,1,0,0,1,0],
-             [1,0,0,0,0,0,0],
-             [1,0,1,0,1,0,0]]
+             [0,1,1,0,1,1,0],
+             [0,0,1,0,0,1,0],
+             [1,0,1,0,1,1,0],
+             [1,0,0,0,1,0,0]]
     grid3 = [[0, 0, 0, 0, 0],
             [0, 1, 0, 1, 0],
             [0, 0, 0, 1, 0],
@@ -90,5 +90,5 @@ if __name__ == "__main__":
         else:
             print("No path found.")
         print("Number of node explored: ",nodeexplored)
-        print("The number of time the a node is push to a heap or heapify is called: ",heapCount)
+        print("The number of time the a node is push to a heap or heapify is called: ",nodeexplored)
         print("Execution time:", endtime-starttime)

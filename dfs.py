@@ -46,11 +46,12 @@ if __name__ == "__main__":
             [0, 0, 0, 1, 0],
             [0, 0, 1, 1, 1],
             [0, 0, 0, 0, 0]]
-    grid2 = [[0,0,1,0,1,0,1],
+    grid2 = [[0,1,1,0,1,0,1],
              [0,0,0,0,0,0,0],
-             [0,1,1,0,0,1,0],
-             [1,0,0,0,0,0,0],
-             [1,0,1,0,1,0,0]]
+             [0,1,1,0,1,1,0],
+             [0,0,1,0,0,1,0],
+             [1,0,1,0,1,1,0],
+             [1,0,0,0,1,0,0]]
     grid3 = [[0, 0, 0, 0, 0],
             [0, 1, 0, 1, 0],
             [0, 0, 0, 1, 0],
@@ -68,6 +69,6 @@ if __name__ == "__main__":
             print("Path found:", path)
         else:
             print("No path found.")
-        print(nodeexplored)
+        print("Explored node count: ",nodeexplored)
         print("runtime: ", endtime-starttime)
 

@@ -49,12 +49,12 @@ def astar(grid, start, goal):
             neighbor = (current.position[0] + dx, current.position[1] + dy)
             if 0 <= neighbor[0] < len(grid) and 0 <= neighbor[1] < len(grid[0]) and grid[neighbor[0]][neighbor[1]]!=1:
                 #don't run into walls and keep within bounds
-                nodecount +=1
+
                 neighborNode = Node(current,neighbor)
                 if neighborNode in close_set:
                     #ignore node in close set already
                     continue
-                
+                nodecount +=1                
                 neighborNode.h = heuristic(neighbor,goal)
                 neighborNode.g = current.g + 1 # Assuming uniform cost for all movements
                 neighborNode.f = neighborNode.h+neighborNode.g
@@ -89,11 +89,12 @@ if __name__ == "__main__":
             [0, 0, 0, 1, 0],
             [0, 0, 1, 1, 1],
             [0, 0, 0, 0, 0]]
-    grid2 = [[0,0,1,0,1,0,1],
+    grid2 = [[0,1,1,0,1,0,1],
              [0,0,0,0,0,0,0],
-             [0,1,1,0,0,1,0],
-             [1,0,0,0,0,0,0],
-             [1,0,1,0,1,0,0]]
+             [0,1,1,0,1,1,0],
+             [0,0,1,0,0,1,0],
+             [1,0,1,0,1,1,0],
+             [1,0,0,0,1,0,0]]
     grid3 = [[0, 0, 0, 0, 0],
             [0, 1, 0, 1, 0],
             [0, 0, 0, 1, 0],
