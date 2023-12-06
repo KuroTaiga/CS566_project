@@ -46,6 +46,7 @@ def Dijkstra(maze, start, end):
             path = Path(S, pre, start, end)
             return (path,nodecount)
         dis.pop(Q.index(point))
+        Q.pop(Q.index(point))
         for point in S:
             for i in range (0,4):
                 nodecount +=1
@@ -56,6 +57,7 @@ def Dijkstra(maze, start, end):
                     dis[Q.index(nextpoint[0]*len(maze[0])+nextpoint[1])] = dis_determ[S.index(point)]+1
                     temp1.append(point)
                     temp2.append(nextpoint[0]*len(maze[0])+nextpoint[1])
+
 
     return False
 
